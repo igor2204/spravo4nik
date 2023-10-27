@@ -6,53 +6,55 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.content.SharedPreferences;
 
 public class RecordActivity extends AppCompatActivity {
-    private TextView topicTextView;
-    private EditText noteEditText;
-    private Button editButton;
-
-
-    private String topic = "";
-    private String note = "";
+    private EditText topicEditText;
+    private EditText contentEditText;
+    private Button saveButton;
+    private String selectedTopic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
-        // Находим элементы интерфейса по идентификаторам
-        topicTextView = findViewById(R.id.topicTextView);
-        noteEditText = findViewById(R.id.noteEditText);
-        editButton = findViewById(R.id.editButton);
+        topicEditText = findViewById(R.id.topicEditText);
+        contentEditText = findViewById(R.id.contentEditText);
+        saveButton = findViewById(R.id.saveButton);
 
-
-        // Получаем переданные данные о теме и заметке из интента
+        // Получение данных из предыдущей активити
         Intent intent = getIntent();
-        if (intent != null) {
-            topic = intent.getStringExtra("topic");
-            note = "C:\\Users\\igorc\\OneDrive\\Рабочий стол\\file.txt"; // Здесь нужно получить текст заметки из соответствующего места (например, базы данных)
+        selectedTopic = intent.getStringExtra("topic");
 
-            topicTextView.setText(topic);
-            noteEditText.setText(note);
+        // Загрузка сохраненной темы и текста заметки (если она была)
+        SharedPreferences sharedPreferences = getSharedPreferences("NoteBook", MODE_PRIVATE);
+        String savedTopic = sharedPreferences.getString(selectedTopic + "_topic", "");
+        String savedContent = sharedPreferences.getString(selectedTopic + "_content", "");
 
-        }
+        // Установка загруженной темы и текста заметки в поля редактирования
+        topicEditText.setText(savedTopic);
+        contentEditText.setText(savedContent);
 
-        editButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Получаем измененный текст заметки
-                String updatedNote = noteEditText.getText().toString();
+                // Получение новой темы и текста заметки из полей редактирования
+                String newTopic = topicEditText.getText().toString();
+                String newContent = contentEditText.getText().toString();
 
-                // Здесь нужно сохранить измененный текст заметки в соответствующем месте (например, базе данных)
+                // Сохранение новой темы и текста заметки в SharedPreferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(selectedTopic + "_topic", newTopic);
+                editor.putString(selectedTopic + "_content", newContent);
+                editor.apply();
 
-                // Создаем намерение для возврата к главной активити (MainActivity)
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("updatedNote", updatedNote);
-                setResult(RESULT_OK, returnIntent);
 
-                // Закрываем текущую активити
+
+
+                // Возвращение результата в предыдущую активити
+                Intent resultIntent = new Intent();
+                setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });

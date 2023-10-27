@@ -7,25 +7,23 @@
     android:orientation="vertical"
     tools:context=".RecordActivity">
 
-    <TextView
-        android:id="@+id/topicTextView"
+    <EditText
+        android:id="@+id/topicEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
-
-    <Button
-        android:id="@+id/editButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Редактировать" />
+        android:hint="Тема заметки"/>
 
     <EditText
-        android:id="@+id/noteEditText"
+        android:id="@+id/contentEditText"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Текст заметки"/>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Введите текст заметки"
-        android:maxLines="10"
-        android:layout_marginBottom="24dp" />
+        android:text="Сохранить"/>
+
 </LinearLayout>

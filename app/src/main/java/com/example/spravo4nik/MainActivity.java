@@ -9,35 +9,26 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
-    private String[] topics = {"Тема 1", "Тема 2", "Тема 3"};
     private ListView list;
+    private String[] Topics = {"Тема 1", "Тема 2", "Тема 3"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Находим ListView по идентификатору
-        ListView listView= findViewById(R.id.list);
+        list = findViewById(R.id.list);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, Topics);// адаптер для списка тем
+        list.setAdapter(adapter);// адаптер для ListView
 
-        // Создаем адаптер для списка тем
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, topics);
 
-        // Устанавливаем адаптер для ListView
-        listView.setAdapter(adapter);
-
-        // Устанавливаем обработчик событий для нажатия на элемент списка
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() { //Установка обработчика событий для нажатия на элемент списка
+            @Override//создание интента для запуска дочерней активити
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String topic = topics[position];
-
-                // Создаем намерение для запуска дочерней активити (RecordActivity)
+                String topic = Topics[position];
                 Intent intent = new Intent(MainActivity.this, RecordActivity.class);
                 intent.putExtra("topic", topic);
-
-                // Запускаем дочернюю активити
-                startActivity(intent);
+                startActivity(intent);// запуск дочерней активити
             }
         });
     }
